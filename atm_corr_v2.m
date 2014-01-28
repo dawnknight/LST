@@ -25,7 +25,7 @@ for i = 3 %: length(FolderList)
     MTL_file=dir([subpath,'*MTL.txt']);
     
     
-    f3 = double(imread([subpath ImList(3).name]));    % Wavelength Band 3	0.63-0.69
+    f3 = double(L_lambda);    % Wavelength Band 3	0.63-0.69
     f4 = double(imread([subpath ImList(4).name]));     %Wavelength Band 4	0.77-0.90
     f6_1 = double(imread([subpath ImList(6).name]));
     f3 = double(f3(1475:2230,1845:2815,1));
@@ -67,11 +67,26 @@ for i = 3 %: length(FolderList)
         L_max = 17.04;
         L_min = 0;
         QCAL_max = 255;
-        QCAL_min = 0;
+        QCAL_min = 1;
         L_lambda = ((L_max-L_min)/(QCAL_max-QCAL_min))*(DN-QCAL_min)+L_min;
+         rho_sup3 = pi*(f3 -Lp3)*d^2/(Eo3*cos_theta*Tz3);
+         rho_sup4 = pi*(f4 -Lp4)*d^2/(Eo4*cos_theta*Tz4);
+%         DN = f3;
+%         L_max3 = 234.4;
+%         L_min3 = -5;
+%         QCAL_max = 255;
+%         QCAL_min = 1;
+%         L_lambda3 = ((L_max3-L_min3)/(QCAL_max-QCAL_min))*(DN-QCAL_min)+L_min3;
+%          DN = f4;
+%         L_max4 = 241.1;
+%         L_min4 = -5.1;
+%         QCAL_max = 255;
+%         QCAL_min = 1;
+%         L_lambda4 = ((L_max4-L_min4)/(QCAL_max-QCAL_min))*(DN-QCAL_min)+L_min4;       
+%          rho_sup3 = pi*(L_lambda3-Lp3)*d^2/(Eo3*cos_theta*Tz3);
+%          rho_sup4 = pi*(L_lambda4-Lp4)*d^2/(Eo4*cos_theta*Tz4);
 
-         rho_sup3 = pi*(f3-Lp3)*d^2/(Eo3*cos_theta*Tz3);
-         rho_sup4 = pi*(f4-Lp4)*d^2/(Eo4*cos_theta*Tz4);
+
          NDVI_c = (rho_sup4-rho_sup3)./(rho_sup4+rho_sup3);
          
         elseif method ==2                                 % method SMAC, Rhhman('94)
@@ -91,6 +106,7 @@ for i = 3 %: length(FolderList)
      
      savename_c = sprintf('%s_NDVI_cor_m%.2d.png',FolderList(i).name,method);
      figure, imagesc(NDVI_c)
+
 %      saveas(gcf,[SavePath_N savename_c],'png')
 %      close
      
